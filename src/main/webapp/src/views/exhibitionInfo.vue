@@ -1,5 +1,28 @@
 <template>
   <h1>Exhibition Info</h1>
+  <h2>展示A</h2>
+  <img alt="exhibitionA" src="../assets/exhibitionA.jpg" class="bigimg">
+
+  <div class="centering_item">
+    <table class="centering_item">
+      <tr>
+        <th>画像</th>
+        <th>コメント</th>
+      </tr>
+      <tr>
+        <td><img alt="exhibitionA" src="../assets/exhibitionA.jpg" class="miniimg"></td>
+        <td>コメント</td>
+      </tr>
+      <tr>
+        <td><img alt="exhibitionA" src="../assets/exhibitionA.jpg" class="miniimg"></td>
+        <td>コメント</td>
+      </tr>
+      <tr>
+        <td><router-link to="/exhibitionList">戻る</router-link></td>
+        <td><router-link to="/cutAndComment">コメントを追加</router-link></td>
+      </tr>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -8,6 +31,16 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style >
+img.bigimg {
+  width: 200px;
+  height: 130px;
+}
+img.miniimg {
+  width: 96px;
+  height: 65px;
+}
+.centering_item {
+  margin: 0 auto; /* 中央寄せ */
+}
 </style>
