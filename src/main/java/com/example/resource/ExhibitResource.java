@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import java.util.List;
 
+@Path("/exhibit")
 public class ExhibitResource {
     @GET
     public Uni<List<Exhibit>> getAll() {
@@ -15,7 +16,7 @@ public class ExhibitResource {
 
     @GET
     @Path("{id}")
-    public Uni<Exhibit> get(int id){
+    public Uni<Exhibit> get(Long id){
         return Exhibit.findById(id);
     }
 }

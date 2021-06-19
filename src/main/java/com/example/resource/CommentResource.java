@@ -10,11 +10,17 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 
+@Path("/comment")
 public class CommentResource {
     @GET
-    @Path("{id}")
     public Uni<List<Comment>> getAll() {
         return Comment.listAll();
+    }
+
+    @GET
+    @Path("{id}")
+    public Uni<Comment> get(Long id) {
+        return Comment.findById(id);
     }
 
     @POST
