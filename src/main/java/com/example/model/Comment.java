@@ -1,4 +1,4 @@
-package com.example;
+package com.example.model;
 
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 
