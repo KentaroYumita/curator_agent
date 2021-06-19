@@ -13,9 +13,14 @@ const routes = [
     component: () => import('../views/exhibitionInfo.vue')
   },
   {
-    path: '/cutAndComment',
-    name: 'cutAndComment',
-    component: () => import('../views/cutAndComment.vue')
+    path: '/cutPicture',
+    name: 'cutPicture',
+    component: () => import('../views/cutPicture.vue')
+  },
+  {
+    path: '/comment',
+    name: 'comment',
+    component: () => import('../views/comment.vue')
   },
 ]
 
