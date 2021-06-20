@@ -5,6 +5,7 @@ import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "image_content")
 public class ImageContent extends PanacheEntityBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
