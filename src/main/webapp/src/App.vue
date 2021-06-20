@@ -1,8 +1,8 @@
 <template>
   <div id="nav">
-    <router-link to="/">List</router-link> |
-    <router-link to="/exhibitionInfo">Info</router-link> |
-    <router-link to="/cutAndComment">cut and comment</router-link> |
+    <router-link to="/exhibit">List</router-link> |
+    <router-link to="/exhibit/1">Info</router-link> |
+    <router-link to="/exhibit/1/crop">cut and comment</router-link> |
   </div>
   <router-view/>
 </template>

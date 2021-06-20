@@ -18,8 +18,8 @@
         <td>コメント</td>
       </tr>
       <tr>
-        <td><router-link to="/exhibitionList">戻る</router-link></td>
-        <td><router-link to="/cutAndComment">コメントを追加</router-link></td>
+        <td><router-link to="/exhibit/">戻る</router-link></td>
+        <td><router-link to="/exhibit/1/crop">コメントを追加</router-link></td>
       </tr>
     </table>
   </div>

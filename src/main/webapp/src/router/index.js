@@ -3,17 +3,17 @@ import exhibitionList from "@/views/exhibitionList";
 
 const routes = [
   {
-    path: '/',
+    path: '/exhibit',
     name: 'exhibitionList',
     component: exhibitionList
   },
   {
-    path: '/exhibitionInfo',
+    path: '/exhibit/:id',
     name: 'exhibitionInfo',
     component: () => import('../views/exhibitionInfo.vue')
   },
   {
-    path: '/cutAndComment',
+    path: '/exhibit/:id/crop',
     name: 'cutAndComment',
     component: () => import('../views/cutAndComment.vue')
   },

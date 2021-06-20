@@ -5,7 +5,7 @@
   <div class="centering_item">
     <table class="centering_item">
       <tr>
-        <td><router-link to="/exhibitionInfo">戻る</router-link></td>
+        <td><router-link to="/exhibit/1">戻る</router-link></td>
         <td><button type="button">切り取る</button></td>
       </tr>
     </table>

@@ -15,6 +15,12 @@ public class Exhibit extends PanacheEntityBase {
 
     public String name;
 
+    public static Exhibit create(Long id){
+        Exhibit exhibit = new Exhibit();
+        exhibit.setId(id);
+        return exhibit;
+    }
+
     public Long getId(){
         return id;
     }

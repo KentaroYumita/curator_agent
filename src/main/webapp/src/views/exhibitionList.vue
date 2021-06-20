@@ -10,12 +10,12 @@
     <tr>
       <td>展示A</td>
       <td><img alt="exhibitionA" src="../assets/exhibitionA.jpg" class="miniimg"></td>
-      <td><router-link to="/exhibitionInfo">詳細</router-link></td>
+      <td><router-link to="/exhibit/1">詳細</router-link></td>
     </tr>
     <tr>
       <td>展示B</td>
       <td><img alt="exhibitionB" src="../assets/exhibitionB.jpg" class="miniimg"></td>
-      <td><router-link to="/exhibitionInfo">詳細</router-link></td>
+      <td><router-link to="/exhibit/2">詳細</router-link></td>
     </tr>
   </table>
   </div>
