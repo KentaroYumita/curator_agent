@@ -14,6 +14,9 @@ public class Comment extends PanacheEntityBase {
     @JoinColumn(name = "exhibit_id", referencedColumnName = "id", nullable = false)
     public Exhibit exhibit;
 
+    @Lob
+    @Column(name = "preview", columnDefinition="BLOB")
     public byte[] image;
+    
     public String comment;
 }

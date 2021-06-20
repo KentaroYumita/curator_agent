@@ -16,7 +16,15 @@ public class ImageContent extends PanacheEntityBase {
 
     public String name;
 
+    @Lob
+    @Column(name = "thumbnail", columnDefinition="BLOB")
     public byte[] thumbnail;
+
+    @Lob
+    @Column(name = "preview", columnDefinition="BLOB")
     public byte[] preview;
+
+    @Lob
+    @Column(name = "image", columnDefinition="MEDIUMBLOB")
     public byte[] image;
 }
