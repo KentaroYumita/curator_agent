@@ -5,17 +5,15 @@ import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "image_content")
+@Table(name = "knavi.image_content")
 public class ImageContent extends PanacheEntityBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    Long id;
 
     @ManyToOne
     @JoinColumn(name = "exhibit_id", referencedColumnName = "id", nullable = false)
     public Exhibit exhibit;
-
-    public String name;
 
     @Lob
     @Column(name = "thumbnail", columnDefinition="BLOB")

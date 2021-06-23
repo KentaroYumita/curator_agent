@@ -16,7 +16,7 @@ public class ExhibitResource {
 
     @GET
     @Path("{id}")
-    public Uni<Exhibit> get(Long id){
+    public Uni<Exhibit> get(Long id) {
         return Exhibit.findById(id);
     }
 }

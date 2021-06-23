@@ -1,6 +1,6 @@
 package com.example.resource;
 
-import com.example.model.ImageContent;
+import com.example.model.CropImage;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.mysqlclient.MySQLPool;
 import io.vertx.mutiny.sqlclient.Row;
@@ -14,20 +14,20 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/image_content")
-public class ImageContentResource {
+@Path("/crop_image")
+public class CropImageResource {
     @Inject
     MySQLPool client;
 
     @GET
-    public Uni<List<ImageContent>> getAll() {
-        return ImageContent.listAll();
+    public Uni<List<CropImage>> getAll() {
+        return CropImage.listAll();
     }
 
     @GET
     @Path("{id}")
-    public Uni<ImageContent> get(Long id) {
-        return ImageContent.findById(id);
+    public Uni<CropImage> get(Long id){
+        return CropImage.findById(id);
     }
 
     @GET
@@ -35,7 +35,7 @@ public class ImageContentResource {
     @Path("/image/{id}")
     public Uni<Response> getImage(Long id) {
         return client
-                .preparedQuery("select image from knavi.image_content where id = ?")
+                .preparedQuery("select image from curator_agent.crop_image where id = ?")
                 .execute(Tuple.of(id))
                 .onItem()
                 .transform(rows -> {
