@@ -25,14 +25,16 @@ export default {
   created: function () {
     /*
     console.log("aaa")
-    this.initBaseUrl("localhost:8980");
+    //this.initBaseUrl("localhost:8980");
+    this.initBaseUrl('localhost:8980')
+    //this.$store.dispatch('initBaseUrl',{'url':'http://localhost:8980'})
     console.log("bbb")
     console.log(this.$store.state.baseUrl)
     axios.get(this.$store.getters.getBaseUrl + '/exhibit/')
         .then(response => {
-          this.initialize(response.data);
+          this.$store.dispatch('initExhibit',{'resList': response.data})
+          //this.initialize(response.data);
         })
-
      */
   }
 }
