@@ -8,7 +8,37 @@
   </div>
   <router-view/>
 </template>
+<script>
+import {mapActions} from "vuex";
+//import axios from "axios";
 
+export default {
+  name: 'App',
+
+  methods: {
+    initialize(resList) {
+      this.initExhibit(resList)
+    },
+    ...mapActions(['initExhibit', 'initBaseUrl']),
+  },
+
+  created: function () {
+    /*
+    console.log("aaa")
+    //this.initBaseUrl("localhost:8980");
+    this.initBaseUrl('localhost:8980')
+    //this.$store.dispatch('initBaseUrl',{'url':'http://localhost:8980'})
+    console.log("bbb")
+    console.log(this.$store.state.baseUrl)
+    axios.get(this.$store.getters.getBaseUrl + '/exhibit/')
+        .then(response => {
+          this.$store.dispatch('initExhibit',{'resList': response.data})
+          //this.initialize(response.data);
+        })
+     */
+  }
+}
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
