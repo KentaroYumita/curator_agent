@@ -46,4 +46,38 @@ public class ImageContentResource {
                     return response.build();
                 });
     }
+
+    @GET
+    @Produces("image/jpeg")
+    @Path("/thumbnail/{id}")
+    public Uni<Response> getThumbnail(Long id) {
+        return client
+                .preparedQuery("select thumbnail from knavi.image_content where id = ?")
+                .execute(Tuple.of(id))
+                .onItem()
+                .transform(rows -> {
+                    RowIterator<Row> iterator = rows.iterator();
+                    Row row = iterator.next();
+                    byte[] imgByte = row.getDelegate().getBuffer("thumbnail").getBytes();
+                    Response.ResponseBuilder response = imgByte != null ? Response.ok((Object) imgByte) : Response.status(Response.Status.NOT_FOUND);
+                    return response.build();
+                });
+    }
+
+    @GET
+    @Produces("image/jpeg")
+    @Path("/preview/{id}")
+    public Uni<Response> getPreview(Long id) {
+        return client
+                .preparedQuery("select preview from knavi.image_content where id = ?")
+                .execute(Tuple.of(id))
+                .onItem()
+                .transform(rows -> {
+                    RowIterator<Row> iterator = rows.iterator();
+                    Row row = iterator.next();
+                    byte[] imgByte = row.getDelegate().getBuffer("preview").getBytes();
+                    Response.ResponseBuilder response = imgByte != null ? Response.ok((Object) imgByte) : Response.status(Response.Status.NOT_FOUND);
+                    return response.build();
+                });
+    }
 }
