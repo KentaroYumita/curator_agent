@@ -1,6 +1,6 @@
 <template>
   <div id="nav">
-    <router-link to="/exhibitionList">List</router-link> |
+    <router-link to="/">List</router-link> |
     <router-link to="/exhibitionInfo">Info</router-link> |
     <router-link to="/cutPicture">cut</router-link> |
     <router-link to="/comment">comment</router-link>
