@@ -1,6 +1,6 @@
 package com.example.resource;
 
-import com.example.model.CuratorComment;
+import com.example.model.ExhibitComment;
 import io.smallrye.mutiny.Uni;
 
 import javax.ws.rs.*;
@@ -12,22 +12,22 @@ import java.util.List;
 @Path("/curator_comment")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class CuratorCommentResource {
+public class ExhibitCommentResource {
     @GET
-    public Uni<List<CuratorComment>> getAll() {
-        return CuratorComment.listAll();
+    public Uni<List<ExhibitComment>> getAll() {
+        return ExhibitComment.listAll();
     }
 
     @GET
     @Path("{id}")
-    public Uni<CuratorComment> get(Long id) {
-        return CuratorComment.findById(id);
+    public Uni<ExhibitComment> get(Long id) {
+        return ExhibitComment.findById(id);
     }
 
     @POST
-    public Uni<Response> create(CuratorComment CuratorComment) {
-        return CuratorComment.persist()
-                .call(CuratorComment::flush)
+    public Uni<Response> create(ExhibitComment ExhibitComment) {
+        return ExhibitComment.persist()
+                .call(ExhibitComment::flush)
                 .onItem().transform(id -> URI.create("/exhibit/" + id))
                 .onItem().transform(uri -> Response.created(uri).build());
     }
