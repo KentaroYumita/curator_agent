@@ -10,7 +10,7 @@
 </template>
 <script>
 import {mapActions} from "vuex";
-//import axios from "axios";
+import axios from "axios";
 
 export default {
   name: 'App',
@@ -23,19 +23,16 @@ export default {
   },
 
   created: function () {
-    /*
-    console.log("aaa")
-    //this.initBaseUrl("localhost:8980");
-    this.initBaseUrl('localhost:8980')
-    //this.$store.dispatch('initBaseUrl',{'url':'http://localhost:8980'})
-    console.log("bbb")
+    this.initBaseUrl("http://localhost:8980");
     console.log(this.$store.state.baseUrl)
     axios.get(this.$store.getters.getBaseUrl + '/exhibit/')
         .then(response => {
-          this.$store.dispatch('initExhibit',{'resList': response.data})
-          //this.initialize(response.data);
-        })
-     */
+          console.log(response.data)
+          this.initialize(response.data);
+          console.log(this.$store.state.exhibitList)
+        }).catch(response => {
+         console.log(response)
+    })
   }
 }
 </script>

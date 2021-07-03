@@ -18,57 +18,47 @@
       <td><router-link to="/exhibitionInfo">詳細</router-link></td>
     </tr>
   </table>
-
-
-    <table>
-      <thead>
-      <tr>
-        <td>名前</td>
-        <td>写真</td>
-        <td>ルーター</td>
-      </tr>
-      </thead>
-
-      <tbody>
-      <tr v-for="exhibit in exhibits" :key="exhibit._id">
-        <td>{{ exhibit.id }}</td>
-        <td>{{ exhibit.name }}</td>
-        <td>
-          <router-link to="/exhibitionInfo">Edit</router-link>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-
+    <div v-for="(exhibit, index) in exhibitList" :key="index" >
+      <router-link :to="{ name: 'exhibitionInfo', query: {id: exhibit.id}}" >
+        <!--<img  v-bind:src="exhibitImageUrl+exhibit.id" class="item"/>-->
+        {{index}}: {{exhibit}}
+      </router-link>
+    </div>
   </div>
 
 </template>
 
 <script>
 export default {
-  data() {
+  name: "exhibitionList",
+
+  data () {
     return {
-      exhibits: []
-    };
+      exhibitList:null,
+      exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/"
+    }
   },
-  created: function() {
-    this.fetchItems();
+  methods:{
+    LoadExhibit(exhibitList) {
+      this.exhibitList = exhibitList;
+    }
   },
-  methods: {
-    fetchItems() {
-      let uri = "/items";
-      this.axios.get(uri).then(response => {
-        this.items = response.data;
-      });
-    },
-    deleteItem(id) {
-      let uri = "/items/" + id;
-      this.axios.delete(uri).then(() => {
-        this.fetchItems();
-      });
+  mounted() {
+    this.$store.watch(
+        (state, getters) => getters.getExhibitList,
+        (newValue, oldValue) => {
+          console.log('prefecture changed! %s => %s', oldValue, newValue);
+          this.LoadExhibit(newValue);
+        }
+    );
+  },
+  created(){
+    if(this.$store.state.exhibitList.length > 0){
+      const val = this.$store.state.exhibitList;
+      this.LoadExhibit(val);
     }
   }
-};
+}
 </script>
 
 <style>
