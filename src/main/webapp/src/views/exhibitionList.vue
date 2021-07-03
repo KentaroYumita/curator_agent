@@ -18,14 +18,57 @@
       <td><router-link to="/exhibitionInfo">詳細</router-link></td>
     </tr>
   </table>
+
+
+    <table>
+      <thead>
+      <tr>
+        <td>名前</td>
+        <td>写真</td>
+        <td>ルーター</td>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr v-for="exhibit in exhibits" :key="exhibit._id">
+        <td>{{ exhibit.id }}</td>
+        <td>{{ exhibit.name }}</td>
+        <td>
+          <router-link to="/exhibitionInfo">Edit</router-link>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
   </div>
 
 </template>
 
 <script>
 export default {
-  name: "exhibitionList"
-}
+  data() {
+    return {
+      exhibits: []
+    };
+  },
+  created: function() {
+    this.fetchItems();
+  },
+  methods: {
+    fetchItems() {
+      let uri = "/items";
+      this.axios.get(uri).then(response => {
+        this.items = response.data;
+      });
+    },
+    deleteItem(id) {
+      let uri = "/items/" + id;
+      this.axios.delete(uri).then(() => {
+        this.fetchItems();
+      });
+    }
+  }
+};
 </script>
 
 <style>
