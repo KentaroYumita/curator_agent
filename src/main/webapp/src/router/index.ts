@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import exhibitionList from "@/views/exhibitionList";
+import exhibitionList from "../views/exhibitionList.vue";
 
 const routes = [
   {
