@@ -20,6 +20,7 @@ exports.default = {
     render: function render() {
         var crossorigin = this.crossorigin || undefined;
 
+        // @ts-ignore
         return (0, _vue.h)('div', { style: this.containerStyle }, [(0, _vue.h)('img', {
             ref: 'img',
             src: this.src,
@@ -142,9 +143,13 @@ exports.default = {
     },
     mounted: function mounted() {
         var _$options$props = this.$options.props,
+            // eslint-disable-next-line no-unused-vars
             containerStyle = _$options$props.containerStyle,
+            // eslint-disable-next-line no-unused-vars
             src = _$options$props.src,
+            // eslint-disable-next-line no-unused-vars
             alt = _$options$props.alt,
+            // eslint-disable-next-line no-unused-vars
             imgStyle = _$options$props.imgStyle,
             data = _objectWithoutProperties(_$options$props, ['containerStyle', 'src', 'alt', 'imgStyle']);
 
