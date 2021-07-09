@@ -39,7 +39,7 @@ public class ImageContentResource {
     @Path("/image/{id}")
     public Uni<Response> getImage(Long id) {
         return client
-                .preparedQuery("select image from knavi.image_content where id = ?")
+                .preparedQuery("select image from knavi.image_content where exhibit_id = ?")
                 .execute(Tuple.of(id))
                 .onItem()
                 .transform(rows -> {
@@ -56,7 +56,7 @@ public class ImageContentResource {
     @Path("/thumbnail/{id}")
     public Uni<Response> getThumbnail(Long id) {
         return client
-                .preparedQuery("select thumbnail from knavi.image_content where id = ?")
+                .preparedQuery("select thumbnail from knavi.image_content where exhibit_id = ?")
                 .execute(Tuple.of(id))
                 .onItem()
                 .transform(rows -> {
@@ -73,7 +73,7 @@ public class ImageContentResource {
     @Path("/preview/{id}")
     public Uni<Response> getPreview(Long id) {
         return client
-                .preparedQuery("select preview from knavi.image_content where id = ?")
+                .preparedQuery("select preview from knavi.image_content where exhibit_id = ?")
                 .execute(Tuple.of(id))
                 .onItem()
                 .transform(rows -> {
