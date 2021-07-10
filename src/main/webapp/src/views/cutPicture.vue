@@ -25,7 +25,7 @@
           />
         </div>
         <div class="actions">
-          <router-link to="/exhibitionInfo">戻る</router-link>
+          <!--<router-link to="/exhibitionInfo">戻る</router-link>-->
           <a
               href="#"
               role="button"
@@ -49,6 +49,16 @@
         </div>
       </section>
     </div>
+
+    <div class="centering_item">
+      <textarea name="comment"></textarea >
+      <table class="centering_item">
+        <tr>
+          <td><router-link to="/exhibitionInfo">戻る</router-link></td>
+          <td><router-link to="/exhibitionInfo" @click="sendData">コメントを追加</router-link></td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -61,15 +71,18 @@ export default {
   },
   data() {
     return {
-      imgSrc: '/assets/images/exhibitionA.jpg',
+      imgSrc: this.$store.getters.getBaseUrl+"/image_content/preview/1", //'/assets/images/exhibitionA.jpg',
       cropImg: '',
       data: null,
+
+      cropFlag: false,
     };
   },
   methods: {
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
       this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
+      this.cropFlag = true
     },
     flipX() {
       const dom = this.$refs.flipX;
@@ -132,6 +145,56 @@ export default {
     zoom(percent) {
       this.$refs.cropper.relativeZoom(percent);
     },
+
+    sendData(){
+      // 切り取ってなかった場合
+      // eslint-disable-next-line no-constant-condition
+      if(!this.cropFlag){
+        alert("切り取ってください")
+        return false
+      }
+
+      // textarea読み込み失敗
+      let textarea = document.getElementsByName("comment")[0]
+      if(textarea==null){
+        alert("textdata が読み込めません")
+        return false
+      }
+
+      // コメントが空の場合
+      let comment = textarea.value
+      if(comment==""){
+        alert("コメントを入力してください")
+        return false
+      }
+
+      // 送信データ(JSON)
+      this.getData()
+      let exhibitObj = this.$store.state.exhibitList[1]
+      let ImageData = JSON.parse(this.data)
+      let jsonObj = {
+        exhibit: exhibitObj,
+        comment: comment,
+        image_x: ImageData.x,
+        image_y: ImageData.y,
+        image_width: ImageData.width,
+        image_height: ImageData.height,
+      }
+
+      fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(jsonObj)
+      })
+          .then(response => {response.json()})
+          .then(data => {
+            console.log('success: '+data)
+          }).catch(error => {
+            console.log('error: '+error)
+          })
+    }
   },
 };
 </script>
