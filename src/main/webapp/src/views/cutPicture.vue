@@ -1,6 +1,6 @@
 <template>
   <div>
-
+    {{ this.exhibit.name }}
     <input
         ref="input"
         type="file"
@@ -20,7 +20,7 @@
           />
         </div>
         <div class="actions">
-          <!--<router-link to="/exhibitionInfo">戻る</router-link>-->
+          <!--<router-link to="/exhibitionInfo">戻る</router-link>
           <a
               href="#"
               role="button"
@@ -28,12 +28,13 @@
           >
             切り取る
           </a>
-
+          -->
         </div>
 
       </section>
       <section class="preview-area">
-
+        <div class="preview"></div>
+        <!--
         <div class="cropped-image">
           <img
               v-if="cropImg"
@@ -42,6 +43,7 @@
           />
           <div v-else class="crop-placeholder" />
         </div>
+        -->
       </section>
     </div>
 
@@ -70,7 +72,6 @@ export default {
       cropImg: '',
       data: null,
 
-      cropFlag: false,
       exhibit: this.$store.state.exhibitList[this.$route.query.id],
     };
   },
@@ -78,7 +79,6 @@ export default {
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
       this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      this.cropFlag = true
     },
     flipX() {
       const dom = this.$refs.flipX;
@@ -143,13 +143,6 @@ export default {
     },
 
     sendData(){
-      // 切り取ってなかった場合
-      // eslint-disable-next-line no-constant-condition
-      if(!this.cropFlag){
-        alert("切り取ってください")
-        return false
-      }
-
       // textarea読み込み失敗
       let textarea = document.getElementsByName("comment")[0]
       if(textarea==null){
