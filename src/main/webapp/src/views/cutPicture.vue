@@ -49,8 +49,8 @@
       <textarea name="comment"></textarea >
       <table class="centering_item">
         <tr>
-          <td><router-link to="/exhibitionInfo">戻る</router-link></td>
-          <td><router-link to="/exhibitionInfo" @click="sendData">コメントを追加</router-link></td>
+          <td><router-link :to="{ name: 'exhibitionInfo', query: {id: $route.query.id} }">戻る</router-link></td>
+          <td><router-link :to="{ name: 'exhibitionInfo', query: {id: $route.query.id} }" @click="sendData">コメントを追加</router-link></td>
         </tr>
       </table>
     </div>
@@ -66,11 +66,12 @@ export default {
   },
   data() {
     return {
-      imgSrc: this.$store.getters.getBaseUrl+"/image_content/preview/1", //'/assets/images/exhibitionA.jpg',
+      imgSrc: this.$store.getters.getBaseUrl+"/image_content/preview/"+this.$store.state.exhibitList[this.$route.query.id].id, //'/assets/images/exhibitionA.jpg',
       cropImg: '',
       data: null,
 
       cropFlag: false,
+      exhibit: this.$store.state.exhibitList[this.$route.query.id],
     };
   },
   methods: {
@@ -165,10 +166,9 @@ export default {
 
       // 送信データ(JSON)
       this.getData()
-      let exhibitObj = this.$store.state.exhibitList[1]
       let ImageData = JSON.parse(this.data)
       let jsonObj = {
-        exhibit: exhibitObj,
+        exhibit: this.exhibit,
         comment: comment,
         image_x: ImageData.x,
         image_y: ImageData.y,
@@ -183,7 +183,7 @@ export default {
         },
         body: JSON.stringify(jsonObj)
       })
-          .then(response => {response.json()})
+          .then(response => {return response.json()})
           .then(data => {
             console.log('success: '+data)
           }).catch(error => {

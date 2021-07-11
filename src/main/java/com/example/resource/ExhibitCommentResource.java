@@ -20,8 +20,8 @@ public class ExhibitCommentResource {
 
     @GET
     @Path("{id}")
-    public Uni<ExhibitComment> get(Long id) {
-        return ExhibitComment.findById(id);
+    public Uni<List<ExhibitComment>> get(Long id) {
+        return ExhibitComment.find("exhibit.id = ?1",id).list();
     }
 
     @POST

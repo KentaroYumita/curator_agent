@@ -1,6 +1,6 @@
 <template>
-  <h1>{{ exhibitList[$route.params.id-1].name }}</h1>
-  <img  v-bind:src="exhibitImageUrl+$route.params.id" class="item"/>
+  <h1>{{ this.exhibit.name }}</h1>
+  <img  v-bind:src="exhibitImageUrl+this.exhibit.id" class="item"/>
 
 
   <div class="centering_item">
@@ -9,17 +9,23 @@
         <th>画像</th>
         <th>コメント</th>
       </tr>
+      <tr v-for="(comment, index) in exhibitCommentList" :key="index" >
+        <td><img  v-bind:src="exhibitImageUrl+this.exhibit.id" class="item"/></td>
+        <td>{{ comment.comment }}</td>
+      </tr>
+      <!--
       <tr>
-        <td><img  v-bind:src="exhibitImageUrl+$route.params.id" class="item"/></td>
+        <td><img  v-bind:src="exhibitImageUrl+this.exhibit.id" class="item"/></td>
         <td>コメント</td>
       </tr>
       <tr>
-        <td><img  v-bind:src="exhibitImageUrl+$route.params.id" class="item"/></td>
+        <td><img  v-bind:src="exhibitImageUrl+this.exhibit.id" class="item"/></td>
         <td>コメント</td>
       </tr>
+      -->
       <tr>
         <td><router-link to="/">戻る</router-link></td>
-        <td><router-link to="/cutPicture">コメントを追加</router-link></td>
+        <td><router-link :to="{ name: 'cutPicture', query: {id: $route.query.id} }">コメントを追加</router-link></td>
       </tr>
     </table>
   </div>
@@ -31,9 +37,11 @@ export default {
 
   data () {
     return {
+      exhibit: null,
       exhibitList:null,
+      exhibitCommentList:null,
       exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/",
-      exhibitCommentUrl:this.$store.getters.getBaseUrl+"/text_content/exhibit/",
+      exhibitCommentUrl:this.$store.getters.getBaseUrl+"/exhibit_comment/",
     }
   },
   methods:{
@@ -56,6 +64,17 @@ export default {
         this.LoadExhibit(val);
       }
 
+    this.exhibit = this.$store.state.exhibitList[this.$route.query.id]
+
+    fetch(this.exhibitCommentUrl+this.exhibit.id)
+        .then(response => {return response.json()})
+        .then(data => {
+          this.exhibitCommentList = data
+          console.log('success: '+data)
+        })
+        .catch(error => {
+          console.log('error: '+error)
+        })
   }
 }
 </script>

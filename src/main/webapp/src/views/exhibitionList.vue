@@ -23,7 +23,7 @@
       <td>{{exhibit.name}}</td>
       <td><img  v-bind:src="exhibitImageUrl+exhibit.id" class="item"/></td>
       <td>
-        <router-link :to="`/exhibitionInfo/${exhibit.id}`" >
+        <router-link :to="{ name: 'exhibitionInfo', query: {id: index}}" >
           詳細
         </router-link>
       </td>
