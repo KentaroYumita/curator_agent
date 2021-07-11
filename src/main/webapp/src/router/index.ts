@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import exhibitionList from "../views/exhibitionList.vue";
-import exhibitInfo from '../views/comment.vue'
 
 const routes = [
   {
@@ -9,9 +8,9 @@ const routes = [
     component: exhibitionList
   },
   {
-    path: '/:id',
+    path: '/exhibitionInfo/:id',
     name: 'exhibitionInfo',
-    component: exhibitInfo,
+    component: () => import('../views/exhibitionInfo.vue')
   },
   {
     path: '/cutPicture',

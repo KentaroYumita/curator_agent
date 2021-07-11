@@ -23,7 +23,7 @@
       <td>{{exhibit.name}}</td>
       <td><img  v-bind:src="exhibitImageUrl+exhibit.id" class="item"/></td>
       <td>
-        <router-link :to="{ name: 'exhibitionInfo', query: {id: exhibit.id}}" >
+        <router-link :to="`/exhibitionInfo/${exhibit.id}`" >
           詳細
         </router-link>
       </td>
@@ -40,6 +40,7 @@ export default {
   data () {
     return {
       exhibitList:null,
+      exhibit:null,
       exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/"
     }
   },
