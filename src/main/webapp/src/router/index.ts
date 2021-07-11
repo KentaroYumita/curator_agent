@@ -8,7 +8,7 @@ const routes = [
     component: exhibitionList
   },
   {
-    path: '/exhibitionInfo',
+    path: '/exhibitionInfo/:id',
     name: 'exhibitionInfo',
     component: () => import('../views/exhibitionInfo.vue')
   },

@@ -1,7 +1,7 @@
 <template>
-  <h1>Exhibition Info</h1>
-  <h2>展示A</h2>
-  <img alt="exhibitionA" src="../assets/exhibitionA.jpg" class="bigimg">
+  <h1>{{ exhibitList[$route.params.id-1].name }}</h1>
+  <img  v-bind:src="exhibitImageUrl+$route.params.id" class="item"/>
+
 
   <div class="centering_item">
     <table class="centering_item">
@@ -10,11 +10,11 @@
         <th>コメント</th>
       </tr>
       <tr>
-        <td><img alt="exhibitionA" src="../assets/exhibitionA.jpg" class="miniimg"></td>
+        <td><img  v-bind:src="exhibitImageUrl+$route.params.id" class="item"/></td>
         <td>コメント</td>
       </tr>
       <tr>
-        <td><img alt="exhibitionA" src="../assets/exhibitionA.jpg" class="miniimg"></td>
+        <td><img  v-bind:src="exhibitImageUrl+$route.params.id" class="item"/></td>
         <td>コメント</td>
       </tr>
       <tr>
@@ -27,7 +27,36 @@
 
 <script>
 export default {
-  name: "exhibitionInfo"
+  name: "exhibitionInfo",
+
+  data () {
+    return {
+      exhibitList:null,
+      exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/",
+      exhibitCommentUrl:this.$store.getters.getBaseUrl+"/text_content/exhibit/",
+    }
+  },
+  methods:{
+    LoadExhibit(exhibitList) {
+      this.exhibitList = exhibitList;
+    }
+  },
+  mounted() {
+    this.$store.watch(
+        (state, getters) => getters.getExhibitList,
+        (newValue, oldValue) => {
+          console.log('prefecture changed! %s => %s', oldValue, newValue);
+          this.LoadExhibit(newValue);
+        }
+    );
+  },
+  created(){
+    if(this.$store.state.exhibitList.length > 0){
+        const val = this.$store.state.exhibitList;
+        this.LoadExhibit(val);
+      }
+
+  }
 }
 </script>
 

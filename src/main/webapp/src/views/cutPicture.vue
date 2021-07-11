@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div class="header">
-      <h2>Vue CropperJS</h2>
-      <a href="https://github.com/Agontuk/vue-cropperjs">Github</a>
-    </div>
-    <hr />
 
     <input
         ref="input"
