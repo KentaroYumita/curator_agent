@@ -32,11 +32,11 @@
           </router-link>
         </td>
         <td>
-          <router-link :to="{ name: '', query: {id: index}}" v-if="commentList.filter(c=>c.exhibit.id==exhibit.id).length>0">
-            v
-          </router-link>
+          <label v-bind:for="index">V</label>
+          <input type="checkbox" v-bind:id="index"/>
         </td>
       </tr>
+      <div class="hidden_show">
       <tr v-for="(comment, index2) in commentList.filter(c=>c.exhibit.id==exhibit.id)" :key="index2" style="background-color: #96c8ff">
         <td></td>
         <td>画像</td>
@@ -44,6 +44,7 @@
         <td>編集</td>
         <td>削除</td>
       </tr>
+      </div>
     </tbody>
   </table>
   </div>
@@ -116,6 +117,33 @@ img.miniimg {
 
 .centering_item {
   margin: 0 auto; /* 中央寄せ */
+}
+
+.centering_item label {
+  padding: 15px;
+  font-weight: bold;
+  cursor :pointer;
+  background: #0062CC;
+  color: white;
+}
+
+/*チェックボックスを非表示*/
+.centering_item input {
+  display: none;
+}
+
+.centering_item .hidden_show {
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: 0.8s;
+}
+
+.centering_item input:checked ~ .hidden_show {
+  padding: 10px 0;
+  height: auto;
+  opacity: 1;
 }
 
 .centering_item a {
