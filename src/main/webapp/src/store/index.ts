@@ -2,12 +2,14 @@ import { createStore } from 'vuex'
 
 const store = createStore({
     state:{
-        baseUrl : null,
-        exhibitList: [],
+        baseUrl : null, // QuarkusのURL
+        exhibitList: [],    // 展示一覧
+        commentList: [],    // 展示コメント一覧
     },
     getters:{
         getBaseUrl: state => state.baseUrl,
         getExhibitList: state => state.exhibitList,
+        getCommentList: state => state.commentList,
     },
     mutations:{
         initBaseUrl(state, url){
@@ -16,6 +18,9 @@ const store = createStore({
         intiExhibit(state, resList){
             state.exhibitList = resList;
         },
+        initComment(state, resList){
+            state.commentList = resList;
+        }
     },
     actions:{
         initBaseUrl({commit}, url){
@@ -24,6 +29,9 @@ const store = createStore({
         initExhibit({commit}, resList){
             commit('intiExhibit', resList)
         },
+        initComment({commit}, resList){
+            commit('initComment', resList)
+        }
     }
 })
 

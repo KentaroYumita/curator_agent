@@ -10,28 +10,44 @@
 </template>
 <script>
 import {mapActions} from "vuex";
-import axios from "axios";
 
 export default {
   name: 'App',
 
   methods: {
-    initialize(resList) {
+    initializeExhibit(resList) {
       this.initExhibit(resList)
     },
-    ...mapActions(['initExhibit', 'initBaseUrl']),
+    initializeComment(resList){
+      this.initComment(resList)
+    },
+    ...mapActions(['initExhibit', 'initComment', 'initBaseUrl']),
   },
 
   created: function () {
     this.initBaseUrl("http://localhost:8980");
     console.log(this.$store.state.baseUrl)
-    axios.get(this.$store.getters.getBaseUrl + '/exhibit/')
-        .then(response => {
-          console.log(response.data)
-          this.initialize(response.data);
-          console.log(this.$store.state.exhibitList)
-        }).catch(response => {
-         console.log(response)
+
+    // 展示読み込み
+    fetch(this.$store.getters.getBaseUrl + '/exhibit/')
+        .then(response=>{return response.json()})
+        .then(data => {
+          //console.log(data)
+          this.initializeExhibit(data);
+          //console.log(this.$store.state.exhibitList)
+        }).catch(error => {
+          console.log('error: '+error)
+        })
+
+    // 展示コメント読み込み
+    fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/')
+        .then(response=>{return response.json()})
+        .then(data => {
+          //console.log(data)
+          this.initializeComment(data);
+          //console.log(this.$store.state.commentList)
+        }).catch(error => {
+      console.log('error: '+error)
     })
   }
 }

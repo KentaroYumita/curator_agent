@@ -1,11 +1,13 @@
 <template>
-  <h1>Exhibition List</h1>
+  <h1>Comment List</h1>
   <div class="centering_item">
   <table border=1 class="centering_item">
     <tr>
       <th>名前</th>
       <th>展示</th>
-      <th>詳細</th>
+      <th>コメント数</th>
+      <th>コメント追加</th>
+      <th></th>
     </tr>
     <!--
     <tr>
@@ -19,15 +21,30 @@
       <td><router-link to="/exhibitionInfo">詳細</router-link></td>
     </tr>
     -->
-    <tr v-for="(exhibit, index) in exhibitList" :key="index" >
-      <td>{{exhibit.name}}</td>
-      <td><img  v-bind:src="exhibitImageUrl+exhibit.id" class="item"/></td>
-      <td>
-        <router-link :to="{ name: 'exhibitionInfo', query: {id: index}}" >
-          詳細
-        </router-link>
-      </td>
-    </tr>
+    <tbody v-for="(exhibit, index) in exhibitList" :key="index" >
+      <tr>
+        <td>{{exhibit.name}}</td>
+        <td><img  v-bind:src="exhibitImageUrl+exhibit.id" class="item"/></td>
+        <td>{{ commentList.filter(c=>c.exhibit.id==exhibit.id).length }}</td>
+        <td>
+          <router-link :to="{ name: 'cutPicture', query: {id: index}}" >
+            コメント追加
+          </router-link>
+        </td>
+        <td>
+          <router-link :to="{ name: '', query: {id: index}}" v-if="commentList.filter(c=>c.exhibit.id==exhibit.id).length>0">
+            v
+          </router-link>
+        </td>
+      </tr>
+      <tr v-for="(comment, index2) in commentList.filter(c=>c.exhibit.id==exhibit.id)" :key="index2" style="background-color: #96c8ff">
+        <td></td>
+        <td>画像</td>
+        <td>{{ comment.comment }}</td>
+        <td>編集</td>
+        <td>削除</td>
+      </tr>
+    </tbody>
   </table>
   </div>
 
@@ -39,29 +56,52 @@ export default {
 
   data () {
     return {
-      exhibitList:null,
-      exhibit:null,
-      exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/"
+      exhibitList:null, // 展示リスト
+      exhibit:null,   // 展示
+      commentList:null, // 展示コメントリスト
+      comment:null, // 展示コメント
+      exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/", // Quarkusの展示URL
+      exhibitCommentUrl:this.$store.getters.getBaseUrl+"/exhibit_comment" // Quarkusの展示コメントURL
     }
   },
   methods:{
     LoadExhibit(exhibitList) {
       this.exhibitList = exhibitList;
+      console.log("exhibit load completed")
+    },
+    LoadComment(commentList) {
+      this.commentList = commentList;
+      console.log("comment load completed")
     }
   },
   mounted() {
     this.$store.watch(
         (state, getters) => getters.getExhibitList,
         (newValue, oldValue) => {
-          console.log('prefecture changed! %s => %s', oldValue, newValue);
+          console.log('exhibit prefecture changed! %s => %s', oldValue, newValue);
           this.LoadExhibit(newValue);
         }
-    );
+    ),
+
+    this.$store.watch(
+        (state, getters) => getters.getCommentList,
+        (newValue, oldValue) => {
+          console.log('comment prefecture changed! %s => %s', oldValue, newValue);
+          this.LoadComment(newValue);
+        }
+    )
   },
   created(){
+    // 展示読み込み
     if(this.$store.state.exhibitList.length > 0){
       const val = this.$store.state.exhibitList;
       this.LoadExhibit(val);
+    }
+
+    // 展示コメント読み込み
+    if(this.$store.state.commentList.length > 0){
+      const val = this.$store.state.commentList;
+      this.LoadComment(val);
     }
   }
 }
