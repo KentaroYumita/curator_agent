@@ -51,8 +51,8 @@
       <textarea name="comment"></textarea >
       <table class="centering_item">
         <tr>
-          <td><router-link :to="{ name: 'exhibitionList', query: {id: $route.query.id} }">戻る</router-link></td>
-          <td><router-link :to="{ name: 'exhibitionList', query: {id: $route.query.id} }" @click="sendData">追加</router-link></td>
+          <td><router-link :to="{ name: 'exhibitionList'}">戻る</router-link></td>
+          <td><router-link :to="{ name: 'exhibitionList'}" @click="sendData">追加</router-link></td>
         </tr>
       </table>
     </div>
