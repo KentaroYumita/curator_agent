@@ -45,6 +45,7 @@
         <td>削除</td>
       </tr>
       </div>
+
     </tbody>
   </table>
   </div>
@@ -82,7 +83,7 @@ export default {
           console.log('exhibit prefecture changed! %s => %s', oldValue, newValue);
           this.LoadExhibit(newValue);
         }
-    ),
+    )
 
     this.$store.watch(
         (state, getters) => getters.getCommentList,
@@ -128,8 +129,9 @@ img.miniimg {
 }
 
 /*チェックボックスを非表示*/
-.centering_item input {
-  display: none;
+
+.centering_item label:hover {
+  background: #efefef;
 }
 
 .centering_item .hidden_show {
