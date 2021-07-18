@@ -183,9 +183,7 @@ export default {
             console.log('error: '+error)
           })
 
-      this.$router.push({name:"comment"})
       this.$router.push({name:"exhibitionList"})
-      window.location.reload()
     }
   },
 };

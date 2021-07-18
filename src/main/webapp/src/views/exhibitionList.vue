@@ -42,7 +42,9 @@
         <!-- ここから非表示 -->
         <tr v-for="(comment, index2) in commentList.filter(c=>c.exhibit.id==exhibit.id)" :key="index2" class="hidden_show" v-bind:id="index">
           <td></td>
-          <td>画像</td>
+          <td>
+            <img v-bind:src="exhibitImagePreviewUrl+exhibit.id"/>
+          </td>
           <td style="width:20em">{{ comment.comment }}</td>
           <td>
             <router-link :to="{ name: ''}">
@@ -73,8 +75,9 @@ export default {
       exhibit:null,   // 展示
       commentList:null, // 展示コメントリスト
       comment:null, // 展示コメント
-      exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/", // Quarkusの展示URL
-      exhibitCommentUrl:this.$store.getters.getBaseUrl+"/exhibit_comment" // Quarkusの展示コメントURL
+      exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/", // Quarkusの展示画像(thumbnail)URL
+      exhibitImagePreviewUrl:this.$store.getters.getBaseUrl+"/image_content/preview/", // Quarkusの展示画像(preview)URL
+      exhibitCommentUrl:this.$store.getters.getBaseUrl+"/exhibit_comment", // Quarkusの展示コメントURL
     }
   },
   methods:{
@@ -107,7 +110,6 @@ export default {
               console.log('error: ' + error)
             })
 
-        this.$router.push({name:'comment'})
         this.$router.push({name:'exhibitionList'})
         window.location.reload()
       }
@@ -155,6 +157,29 @@ export default {
           }
         }
       }
+    },
+
+    // 展示画像のスタイル
+    createImageStyle() {
+      let hs = document.getElementsByClassName("hidden_show")
+      let sorted_list = this.$store.state.commentList.sort((a,b) => {
+        return a.exhibit.id - b.exhibit.id;
+      })
+
+      for(let i=0; i<hs.length; i++) {
+        let img_tag = hs[i].getElementsByTagName("img")[0]
+        let img = new Image()
+        let comment = sorted_list[i]
+
+        img.onload = function () {
+          img_tag.style.width = comment.image_width+'px'
+          img_tag.style.height = comment.image_height+'px'
+          img_tag.style.objectPosition = (comment.image_x/(img.width-comment.image_width))*100+'% '+(comment.image_y/(img.height-comment.image_height))*100+'%'
+          img_tag.style.objectFit = 'none'
+        }
+
+        img.src = img_tag.src
+      }
     }
   },
   mounted() {
@@ -172,6 +197,8 @@ export default {
           this.LoadComment(newValue);
         }
     )
+
+    this.createImageStyle()
   },
   created(){
     // 展示読み込み
@@ -185,6 +212,23 @@ export default {
       const val = this.$store.state.commentList;
       this.LoadComment(val);
     }
+  },
+  updated(){
+    this.$store.watch(
+        (state, getters) => getters.getExhibitList,
+        (newValue, oldValue) => {
+          console.log('exhibit prefecture changed! %s => %s', oldValue, newValue);
+          this.LoadExhibit(newValue);
+        }
+    )
+    this.$store.watch(
+        (state, getters) => getters.getCommentList,
+        (newValue, oldValue) => {
+          console.log('comment prefecture changed! %s => %s', oldValue, newValue);
+          this.LoadComment(newValue);
+        }
+    )
+    this.createImageStyle()
   }
 }
 </script>
