@@ -2,13 +2,15 @@
   <h1>Comment List</h1>
   <div class="centering_item">
     <table border=1 class="centering_item">
-      <tr>
-        <th>名前</th>
-        <th>展示</th>
-        <th>コメント数</th>
-        <th>コメント追加</th>
-        <th></th>
-      </tr>
+      <thead>
+        <tr>
+          <th>名前</th>
+          <th>展示</th>
+          <th style="width: 20em">コメント数</th>
+          <th>コメント追加</th>
+          <th style="width: 6em"></th>
+        </tr>
+      </thead>
       <!--
       <tr>
         <td>展示A</td>
@@ -21,36 +23,39 @@
         <td><router-link to="/exhibitionInfo">詳細</router-link></td>
       </tr>
       -->
-      <tbody v-for="(exhibit, index) in exhibitList" :key="index" >
-      <tr>
-        <td>{{exhibit.name}}</td>
-        <td><img  v-bind:src="exhibitImageUrl+exhibit.id" class="item"/></td>
-        <td>{{ commentList.filter(c=>c.exhibit.id==exhibit.id).length }}</td>
-        <td>
-          <router-link :to="{ name: 'cutPicture', query: {id: index}}" >
-            コメント追加
-          </router-link>
-        </td>
-        <td>
-          <label v-bind:for="index">V</label>
-          <input type="checkbox" v-bind:id="index"/>
-        </td>
-      </tr>
-      <tr v-for="(comment, index2) in commentList.filter(c=>c.exhibit.id==exhibit.id)" :key="index2" style="background-color: #96c8ff" class="hidden_showa">
-        <td></td>
-        <td>画像</td>
-        <td style="width:20em">{{ comment.comment }}</td>
-        <td>
-          <router-link :to="{ name: ''}">
-            編集
-          </router-link>
-        </td>
-        <td>
-          <router-link :to="{ name: ''}" v-on:click="DeleteComment(comment)">
-            削除
-          </router-link>
-        </td>
-      </tr>
+      <tbody v-for="(exhibit, index) in exhibitList" :key="index" class="hidden_box">
+        <tr>
+          <td>{{exhibit.name}}</td>
+          <td><img  v-bind:src="exhibitImageUrl+exhibit.id" class="item"/></td>
+          <td>{{ commentList.filter(c=>c.exhibit.id==exhibit.id).length }}</td>
+          <td>
+            <router-link :to="{ name: 'cutPicture', query: {id: index}}" >
+              コメント追加
+            </router-link>
+          </td>
+          <td>
+            <label v-bind:for="index">v</label>
+            <input type="checkbox" v-bind:id="index" @click="CheckBox(index)"/>
+          </td>
+        </tr>
+
+        <!-- ここから非表示 -->
+        <tr v-for="(comment, index2) in commentList.filter(c=>c.exhibit.id==exhibit.id)" :key="index2" class="hidden_show" v-bind:id="index">
+          <td></td>
+          <td>画像</td>
+          <td style="width:20em">{{ comment.comment }}</td>
+          <td>
+            <router-link :to="{ name: ''}">
+              編集
+            </router-link>
+          </td>
+          <td>
+            <router-link :to="{ name: ''}" v-on:click="DeleteComment(comment)" style="background-color: red;">
+              削除
+            </router-link>
+          </td>
+        </tr>
+        <!-- ここまで非表示 -->
 
       </tbody>
     </table>
@@ -83,6 +88,7 @@ export default {
       console.log("comment load completed")
     },
 
+    // コメント削除
     DeleteComment(cm){
       if(window.confirm("削除します。よろしいですか？")) {
         fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/'+cm.id, {
@@ -98,10 +104,56 @@ export default {
             .then(data => {
               console.log('success: ' + data)
             }).catch(error => {
-          console.log('error: ' + error)
-        })
+              console.log('error: ' + error)
+            })
 
-        document.location.reload()
+        this.$router.push({name:'comment'})
+        this.$router.push({name:'exhibitionList'})
+        window.location.reload()
+      }
+    },
+
+    // コメントの表示/非表示
+    CheckBox(index){
+      let check = document.getElementById(index)
+      let lab = document.getElementsByTagName("label")[index]
+      let hides = document.getElementsByClassName("hidden_show")
+
+      // 表示
+      if(check.checked){
+        // ラベルを^に変える
+        lab.innerHTML = "^"
+
+        // コメントのcssを変える
+        for(let i=0; i<hides.length; i++) {
+          if(hides[i].id==index) {
+            hides[i].style =
+                "  padding: 10px 0;\n" +
+                "  height: auto;\n" +
+                "  opacity: 1;" +
+                "  background-color: #96c8ff\n"
+
+            hides[i].style.display='table-row';
+          }
+        }
+      }
+
+      // 非表示
+      else{
+        // ラベルをvに変える
+        lab.innerHTML = "v"
+
+        // コメントのcssを変える
+        for(let i=0; i<hides.length; i++) {
+          if(hides[i].id==index) {
+            hides[i].style =
+                "  height: 0;\n" +
+                "  padding: 0;\n" +
+                "  overflow: hidden;"
+
+            hides[i].style.display='none';
+          }
+        }
       }
     }
   },
@@ -156,21 +208,27 @@ img.miniimg {
 }
 
 /*チェックボックスを非表示*/
+/*
 .centering_item label:hover {
   background: #efefef;
 }
+*/
 
-.centering_item .hidden_show {
+.centering_item input {
+  display: none;
+}
+
+.hidden_box .hidden_show {
   height: 0;
   padding: 0;
-  overflow: hidden;
   opacity: 0;
-  transition: 0.8s;
+  display: none;
 }
-.centering_item input:checked ~ .hidden_show {
+.hidden_box input:checked ~ .hidden_show {
   padding: 10px 0;
   height: auto;
   opacity: 1;
+  display:table;
 }
 
 .centering_item a {

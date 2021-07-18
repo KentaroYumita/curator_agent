@@ -52,7 +52,7 @@
       <table class="centering_item">
         <tr>
           <td><router-link :to="{ name: 'exhibitionList'}">戻る</router-link></td>
-          <td><router-link :to="{ name: 'exhibitionList'}" @click="sendData">追加</router-link></td>
+          <td><router-link :to="{ name: ''}" @click="sendData">追加</router-link></td>
         </tr>
       </table>
     </div>
@@ -182,6 +182,10 @@ export default {
           }).catch(error => {
             console.log('error: '+error)
           })
+
+      this.$router.push({name:"comment"})
+      this.$router.push({name:"exhibitionList"})
+      window.location.reload()
     }
   },
 };
