@@ -1,52 +1,66 @@
 <template>
   <h1>Comment List</h1>
   <div class="centering_item">
-  <table border=1 class="centering_item">
-    <tr>
-      <th>名前</th>
-      <th>展示</th>
-      <th>コメント数</th>
-      <th>コメント追加</th>
-      <th></th>
-    </tr>
-    <!--
-    <tr>
-      <td>展示A</td>
-      <td><img alt="exhibitionA" src="../assets/exhibitionA.jpg" class="miniimg"></td>
-      <td><router-link to="/exhibitionInfo">詳細</router-link></td>
-    </tr>
-    <tr>
-      <td>展示B</td>
-      <td><img alt="exhibitionB" src="../assets/exhibitionB.jpg" class="miniimg"></td>
-      <td><router-link to="/exhibitionInfo">詳細</router-link></td>
-    </tr>
-    -->
-    <tbody v-for="(exhibit, index) in exhibitList" :key="index" >
+    <table border=1 class="centering_item">
+      <thead>
+        <tr>
+          <th>名前</th>
+          <th>展示</th>
+          <th style="width: 20em">コメント数</th>
+          <th>コメント追加</th>
+          <th style="width: 6em"></th>
+        </tr>
+      </thead>
+      <!--
       <tr>
-        <td>{{exhibit.name}}</td>
-        <td><img  v-bind:src="exhibitImageUrl+exhibit.id" class="item"/></td>
-        <td>{{ commentList.filter(c=>c.exhibit.id==exhibit.id).length }}</td>
-        <td>
-          <router-link :to="{ name: 'cutPicture', query: {id: index}}" >
-            コメント追加
-          </router-link>
-        </td>
-        <td>
-          <label v-bind:for="index">VXXV</label>
-          <input type="checkbox" v-bind:id="index"/>
-        </td>
+        <td>展示A</td>
+        <td><img alt="exhibitionA" src="../assets/exhibitionA.jpg" class="miniimg"></td>
+        <td><router-link to="/exhibitionInfo">詳細</router-link></td>
       </tr>
-      <div class="hidden_show">
-      <tr v-for="(comment, index2) in commentList.filter(c=>c.exhibit.id==exhibit.id)" :key="index2" style="background-color: #96c8ff">
-        <td></td>
-        <td>画像</td>
-        <td>{{ comment.comment }}</td>
-        <td>編集</td>
-        <td>削除</td>
+      <tr>
+        <td>展示B</td>
+        <td><img alt="exhibitionB" src="../assets/exhibitionB.jpg" class="miniimg"></td>
+        <td><router-link to="/exhibitionInfo">詳細</router-link></td>
       </tr>
-      </div>
-    </tbody>
-  </table>
+      -->
+      <tbody v-for="(exhibit, index) in exhibitList" :key="index" class="hidden_box">
+        <tr>
+          <td>{{exhibit.name}}</td>
+          <td><img  v-bind:src="exhibitImageUrl+exhibit.id" class="item"/></td>
+          <td>{{ commentList.filter(c=>c.exhibit.id==exhibit.id).length }}</td>
+          <td>
+            <router-link :to="{ name: 'cutPicture', query: {id: index}}" >
+              コメント追加
+            </router-link>
+          </td>
+          <td>
+            <label v-bind:for="index">v</label>
+            <input type="checkbox" v-bind:id="index" @click="CheckBox(index)"/>
+          </td>
+        </tr>
+
+        <!-- ここから非表示 -->
+        <tr v-for="(comment, index2) in commentList.filter(c=>c.exhibit.id==exhibit.id)" :key="index2" class="hidden_show" v-bind:id="index">
+          <td></td>
+          <td>
+            <img v-bind:src="exhibitImagePreviewUrl+exhibit.id"/>
+          </td>
+          <td style="width:20em">{{ comment.comment }}</td>
+          <td>
+            <router-link :to="{ name: ''}">
+              編集
+            </router-link>
+          </td>
+          <td>
+            <router-link :to="{ name: ''}" v-on:click="DeleteComment(comment)" style="background-color: red;">
+              削除
+            </router-link>
+          </td>
+        </tr>
+        <!-- ここまで非表示 -->
+
+      </tbody>
+    </table>
   </div>
 
 </template>
@@ -61,8 +75,9 @@ export default {
       exhibit:null,   // 展示
       commentList:null, // 展示コメントリスト
       comment:null, // 展示コメント
-      exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/", // Quarkusの展示URL
-      exhibitCommentUrl:this.$store.getters.getBaseUrl+"/exhibit_comment" // Quarkusの展示コメントURL
+      exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/", // Quarkusの展示画像(thumbnail)URL
+      exhibitImagePreviewUrl:this.$store.getters.getBaseUrl+"/image_content/preview/", // Quarkusの展示画像(preview)URL
+      exhibitCommentUrl:this.$store.getters.getBaseUrl+"/exhibit_comment", // Quarkusの展示コメントURL
     }
   },
   methods:{
@@ -70,9 +85,101 @@ export default {
       this.exhibitList = exhibitList;
       console.log("exhibit load completed")
     },
+
     LoadComment(commentList) {
       this.commentList = commentList;
       console.log("comment load completed")
+    },
+
+    // コメント削除
+    DeleteComment(cm){
+      if(window.confirm("削除します。よろしいですか？")) {
+        fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/'+cm.id, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(cm)
+        })
+            .then(response => {
+              return response.json()
+            })
+            .then(data => {
+              console.log('success: ' + data)
+            }).catch(error => {
+              console.log('error: ' + error)
+            })
+
+        this.$router.push({name:'exhibitionList'})
+        window.location.reload()
+      }
+    },
+
+    // コメントの表示/非表示
+    CheckBox(index){
+      let check = document.getElementById(index)
+      let lab = document.getElementsByTagName("label")[index]
+      let hides = document.getElementsByClassName("hidden_show")
+
+      // 表示
+      if(check.checked){
+        // ラベルを^に変える
+        lab.innerHTML = "^"
+
+        // コメントのcssを変える
+        for(let i=0; i<hides.length; i++) {
+          if(hides[i].id==index) {
+            hides[i].style =
+                "  padding: 10px 0;\n" +
+                "  height: auto;\n" +
+                "  opacity: 1;" +
+                "  background-color: #96c8ff\n"
+
+            hides[i].style.display='table-row';
+          }
+        }
+      }
+
+      // 非表示
+      else{
+        // ラベルをvに変える
+        lab.innerHTML = "v"
+
+        // コメントのcssを変える
+        for(let i=0; i<hides.length; i++) {
+          if(hides[i].id==index) {
+            hides[i].style =
+                "  height: 0;\n" +
+                "  padding: 0;\n" +
+                "  overflow: hidden;"
+
+            hides[i].style.display='none';
+          }
+        }
+      }
+    },
+
+    // 展示画像のスタイル
+    createImageStyle() {
+      let hs = document.getElementsByClassName("hidden_show")
+      let sorted_list = this.$store.state.commentList.sort((a,b) => {
+        return a.exhibit.id - b.exhibit.id;
+      })
+
+      for(let i=0; i<hs.length; i++) {
+        let img_tag = hs[i].getElementsByTagName("img")[0]
+        let img = new Image()
+        let comment = sorted_list[i]
+
+        img.onload = function () {
+          img_tag.style.width = comment.image_width+'px'
+          img_tag.style.height = comment.image_height+'px'
+          img_tag.style.objectPosition = (comment.image_x/(img.width-comment.image_width))*100+'% '+(comment.image_y/(img.height-comment.image_height))*100+'%'
+          img_tag.style.objectFit = 'none'
+        }
+
+        img.src = img_tag.src
+      }
     }
   },
   mounted() {
@@ -82,8 +189,7 @@ export default {
           console.log('exhibit prefecture changed! %s => %s', oldValue, newValue);
           this.LoadExhibit(newValue);
         }
-    ),
-
+    )
     this.$store.watch(
         (state, getters) => getters.getCommentList,
         (newValue, oldValue) => {
@@ -91,6 +197,8 @@ export default {
           this.LoadComment(newValue);
         }
     )
+
+    this.createImageStyle()
   },
   created(){
     // 展示読み込み
@@ -104,6 +212,23 @@ export default {
       const val = this.$store.state.commentList;
       this.LoadComment(val);
     }
+  },
+  updated(){
+    this.$store.watch(
+        (state, getters) => getters.getExhibitList,
+        (newValue, oldValue) => {
+          console.log('exhibit prefecture changed! %s => %s', oldValue, newValue);
+          this.LoadExhibit(newValue);
+        }
+    )
+    this.$store.watch(
+        (state, getters) => getters.getCommentList,
+        (newValue, oldValue) => {
+          console.log('comment prefecture changed! %s => %s', oldValue, newValue);
+          this.LoadComment(newValue);
+        }
+    )
+    this.createImageStyle()
   }
 }
 </script>
@@ -113,7 +238,6 @@ img.miniimg {
   width: 96px;
   height: 65px;
 }
-
 
 .centering_item {
   margin: 0 auto; /* 中央寄せ */
@@ -128,22 +252,27 @@ img.miniimg {
 }
 
 /*チェックボックスを非表示*/
+/*
+.centering_item label:hover {
+  background: #efefef;
+}
+*/
+
 .centering_item input {
   display: none;
 }
 
-.centering_item .hidden_show {
+.hidden_box .hidden_show {
   height: 0;
   padding: 0;
-  overflow: hidden;
   opacity: 0;
-  transition: 0.8s;
+  display: none;
 }
-
-.centering_item input:checked ~ .hidden_show {
+.hidden_box input:checked ~ .hidden_show {
   padding: 10px 0;
   height: auto;
   opacity: 1;
+  display:table;
 }
 
 .centering_item a {
