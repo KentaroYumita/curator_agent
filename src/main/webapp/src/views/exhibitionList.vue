@@ -32,7 +32,7 @@
           </router-link>
         </td>
         <td>
-          <label v-bind:for="index">V</label>
+          <label v-bind:for="index">VXXV</label>
           <input type="checkbox" v-bind:id="index"/>
         </td>
       </tr>
