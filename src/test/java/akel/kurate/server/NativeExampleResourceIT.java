@@ -1,4 +1,4 @@
-package com.example;
+package akel.kurate.server;
 
 import io.quarkus.test.junit.NativeImageTest;
 

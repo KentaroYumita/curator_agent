@@ -1,6 +1,6 @@
-package com.example.resource;
+package akel.kurate.server.resource;
 
-import com.example.model.Exhibit;
+import akel.kurate.server.model.Exhibit;
 import io.smallrye.mutiny.Uni;
 
 import javax.ws.rs.Consumes;

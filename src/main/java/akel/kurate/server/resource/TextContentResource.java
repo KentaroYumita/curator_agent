@@ -1,8 +1,6 @@
-package com.example.resource;
+package akel.kurate.server.resource;
 
-import com.example.model.Exhibit;
-import com.example.model.TextContent;
-import io.quarkus.panache.common.Parameters;
+import akel.kurate.server.model.TextContent;
 import io.smallrye.mutiny.Uni;
 
 import javax.ws.rs.Consumes;
