@@ -39,12 +39,12 @@ public class ExhibitCommentResource {
 
     @PUT
     public Uni<Response> update(ExhibitComment exhibitComment){
-        return client.preparedQuery("UPDATE exhibit SET " +
+        return client.preparedQuery("UPDATE exhibit_comment SET " +
                 "id = \'"+exhibitComment.id+"\'," +
                 "comment = \'"+exhibitComment.comment+"\'," +
-                "image_x = \'"+exhibitComment.image_x+"\'"+
-                "image_y = \'"+exhibitComment.image_y+"\'"+
-                "image_width = \'"+exhibitComment.image_width+"\'"+
+                "image_x = \'"+exhibitComment.image_x+"\',"+
+                "image_y = \'"+exhibitComment.image_y+"\',"+
+                "image_width = \'"+exhibitComment.image_width+"\',"+
                 "image_height = \'"+exhibitComment.image_height+"\'"+
                 " WHERE id = "+exhibitComment.id)
                 .execute()
