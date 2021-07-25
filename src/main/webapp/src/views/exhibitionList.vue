@@ -52,7 +52,7 @@
             </router-link>
           </td>
           <td>
-            <router-link :to="{ name: ''}" v-on:click="DeleteComment(comment)" style="background-color: red;">
+            <router-link :to="{ name: ''}" v-on:click="showPopup(comment)" style="background-color: red;">
               削除
             </router-link>
           </td>
@@ -61,6 +61,19 @@
 
       </tbody>
     </table>
+
+    <div class="popup">
+      <div class="popup-inner">
+        <p></p>
+        <router-link :to="{ name: ''}" v-on:click="DeleteComment()" style="background-color: red;">
+          OK
+        </router-link>
+        <router-link :to="{ name: ''}" v-on:click="hidePopup()">
+          キャンセル
+        </router-link>
+      </div>
+      <div class="black-background"></div>
+    </div>
   </div>
 
 </template>
@@ -78,6 +91,8 @@ export default {
       exhibitImageUrl:this.$store.getters.getBaseUrl+"/image_content/thumbnail/", // Quarkusの展示画像(thumbnail)URL
       exhibitImagePreviewUrl:this.$store.getters.getBaseUrl+"/image_content/preview/", // Quarkusの展示画像(preview)URL
       exhibitCommentUrl:this.$store.getters.getBaseUrl+"/exhibit_comment", // Quarkusの展示コメントURL
+
+      delComment: null, // 削除する展示コメント
     }
   },
   methods:{
@@ -92,27 +107,27 @@ export default {
     },
 
     // コメント削除
-    DeleteComment(cm){
-      if(window.confirm("削除します。よろしいですか？")) {
-        fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/'+cm.id, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(cm)
-        })
-            .then(response => {
-              return response.json()
-            })
-            .then(data => {
-              console.log('success: ' + data)
-            }).catch(error => {
-              console.log('error: ' + error)
-            })
+    DeleteComment() {
+      fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/' + this.delComment.id, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.delComment)
+      })
+          .then(response => {
+            return response.json()
+          })
+          .then(data => {
+            console.log('success: ' + data)
+          }).catch(error => {
+        console.log('error: ' + error)
+      })
 
-        this.$router.push({name:'exhibitionList'})
-        window.location.reload()
-      }
+      this.$router.push({name: 'exhibitionList'})
+      window.location.reload()
+
+      this.hidePopup();
     },
 
     // コメントの表示/非表示
@@ -180,7 +195,41 @@ export default {
 
         img.src = img_tag.src
       }
-    }
+    },
+
+    // 削除ポップアップを表示
+    showPopup(cm){
+      let popup = document.getElementsByClassName("popup")[0];
+      popup.style.visibility = "visible";
+
+      let p = popup.getElementsByTagName("p")[0];
+      p.innerText = "展示コメントを削除します。\n\"" + cm.comment+"\"";
+
+      this.delComment = cm;
+
+      // PCでのスクロール禁止
+      document.addEventListener("mousewheel", this.scroll_control, { passive: false });
+      // スマホでのタッチ操作でのスクロール禁止
+      document.addEventListener("touchmove", this.scroll_control, { passive: false });
+    },
+
+    // 削除ポップアップを削除
+    hidePopup(){
+      let popup = document.getElementsByClassName("popup")[0];
+      popup.style.visibility = "hidden";
+
+      this.delComment=null;
+
+      // PCでのスクロール禁止解除
+      document.removeEventListener("mousewheel", this.scroll_control, { passive: false });
+      // スマホでのタッチ操作でのスクロール禁止解除
+      document.removeEventListener('touchmove', this.scroll_control, { passive: false });
+    },
+
+    // スクロール関連メソッド
+    scroll_control(event) {
+      event.preventDefault();
+    },
   },
   mounted() {
     this.$store.watch(
@@ -284,5 +333,40 @@ img.miniimg {
   border-radius: 3px;
   margin-right: 1rem;
   margin-left: 1rem;
+}
+
+/* 削除ポップアップ */
+
+.popup{
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  visibility: hidden;
+}
+
+.popup-inner {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  width: 80%;
+  max-width: 600px;
+  padding: 50px;
+  background-color: #fff;
+  z-index: 2;
+  text-align: center;
+}
+
+.black-background {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.8);
+  z-index: 1;
+  cursor: pointer;
 }
 </style>

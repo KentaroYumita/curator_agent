@@ -1,6 +1,6 @@
-package com.example.resource;
+package akel.kurate.server.resource;
 
-import com.example.model.ExhibitComment;
+import akel.kurate.server.model.ExhibitComment;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.mysqlclient.MySQLPool;
 

@@ -1,4 +1,4 @@
-package com.example.model;
+package akel.kurate.server.model;
 
 import io.quarkus.hibernate.reactive.panache.PanacheEntityBase;
 
