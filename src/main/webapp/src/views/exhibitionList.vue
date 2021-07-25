@@ -47,7 +47,7 @@
           </td>
           <td style="width:20em">{{ comment.comment }}</td>
           <td>
-            <router-link :to="{ name: ''}">
+            <router-link :to="{ name: 'comment', query: {id: [index,commentList.indexOf(comment)]} }">
               編集
             </router-link>
           </td>
