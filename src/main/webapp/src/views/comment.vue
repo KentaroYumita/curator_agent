@@ -48,7 +48,7 @@
     </div>
 
     <div class="centering_item">
-      <textarea name="comment"></textarea >
+      <textarea name="comment" v-model="this.beforeComment.comment"></textarea>
       <table class="centering_item">
         <tr>
           <td><router-link :to="{ name: 'exhibitionList'}">戻る</router-link></td>
@@ -72,7 +72,7 @@ export default {
       imgSrc: this.$store.getters.getBaseUrl+"/image_content/preview/"+this.$store.state.exhibitList[this.$route.query.id[0]].id, //'/assets/images/exhibitionA.jpg',
       cropImg: '',
       data: null,
-      comment: this.$store.state.commentList[this.$route.query.id[1]],
+      beforeComment: this.$store.state.commentList[this.$route.query.id[1]],
       exhibit: this.$store.state.exhibitList[this.$route.query.id[0]],
     };
   },
@@ -162,7 +162,7 @@ export default {
       this.getData()
       let ImageData = JSON.parse(this.data)
       let jsonObj = {
-        exhibit: this.exhibit,
+        id: this.beforeComment.id,
         comment: comment,
         image_x: ImageData.x,
         image_y: ImageData.y,
