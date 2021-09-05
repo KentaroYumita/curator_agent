@@ -3,7 +3,8 @@
     <router-link to="/">List</router-link> |
     <router-link to="/exhibitionInfo">Info</router-link> |
     <router-link to="/cutPicture">cut</router-link> |
-    <router-link to="/comment">comment</router-link>
+    <router-link to="/comment">comment</router-link> |
+    <router-link to="/peopleMap">Map</router-link>
 
   </div>
   <router-view/>
