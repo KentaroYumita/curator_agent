@@ -108,7 +108,7 @@ export default {
 
     // コメント削除
     DeleteComment() {
-      fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/' + this.delComment.id, {
+      fetch(this.$store.getters.getBaseUrl + '/kurate/comment/' + this.delComment.id, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -125,9 +125,6 @@ export default {
         console.log('error: ' + error)
         this.$store.dispatch("updateComment")
       })
-
-      this.$router.push({name: 'exhibitionList'})
-      window.location.reload()
 
       this.hidePopup();
     },

@@ -169,7 +169,7 @@ export default {
         image_height: ImageData.height,
       }
 
-      fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/', {
+      fetch(this.$store.getters.getBaseUrl + '/kurate/comment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

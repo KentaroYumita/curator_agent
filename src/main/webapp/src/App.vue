@@ -40,7 +40,7 @@ export default {
         })
 
     // 展示コメント読み込み
-    fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/')
+    fetch(this.$store.getters.getBaseUrl + '/kurate/comment')
         .then(response=>{return response.json()})
         .then(data => {
           //console.log(data)
@@ -50,20 +50,6 @@ export default {
       console.log('error: '+error)
     })
   },
-
-  beforeRouteUpdate (to, from, next){
-    // 展示コメント読み込み
-    fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/')
-        .then(response=>{return response.json()})
-        .then(data => {
-          //console.log(data)
-          this.initializeComment(data);
-          //console.log(this.$store.state.commentList)
-        }).catch(error => {
-      console.log('error: '+error)
-    })
-    next();
-  }
 }
 </script>
 <style>

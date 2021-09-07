@@ -33,7 +33,7 @@ const store = createStore({
             commit('initComment', resList)
         },
         updateComment(context) {
-            fetch(this.getters.getBaseUrl + "/exhibit_comment/")
+            fetch(this.getters.getBaseUrl + "/kurate/comment")
                 .then(response => {
                     return response.json()
                 })
