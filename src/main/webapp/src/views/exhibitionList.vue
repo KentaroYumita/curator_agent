@@ -34,7 +34,8 @@
             </router-link>
           </td>
           <td>
-            <label v-bind:for="index">v</label>
+            <label v-bind:for="index" v-if="commentList.filter(c=>c.exhibit.id==exhibit.id).length>0">v</label>
+            <label v-bind:for="index" v-else style="background: #FFFFFF;"></label>
             <input type="checkbox" v-bind:id="index" @click="CheckBox(index)"/>
           </td>
         </tr>
