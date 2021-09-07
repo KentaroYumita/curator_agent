@@ -120,8 +120,10 @@ export default {
           })
           .then(data => {
             console.log('success: ' + data)
+            this.$store.dispatch("updateComment")
           }).catch(error => {
         console.log('error: ' + error)
+        this.$store.dispatch("updateComment")
       })
 
       this.$router.push({name: 'exhibitionList'})

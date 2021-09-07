@@ -180,8 +180,10 @@ export default {
           .then(response => {return response.json()})
           .then(data => {
             console.log('success: '+data)
+            this.$store.dispatch("updateComment")
           }).catch(error => {
         console.log('error: '+error)
+        this.$store.dispatch("updateComment")
       })
 
       this.$router.push({name:"exhibitionList"})
