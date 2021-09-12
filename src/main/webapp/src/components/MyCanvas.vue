@@ -1,5 +1,5 @@
 <template>
-  <canvas width="200" height="200" class="canvas"></canvas>
+  <canvas id="canvas" ref="canvas" width="200" height="200" class="canvas"></canvas>
 </template>
 
 <script>
@@ -8,6 +8,12 @@ export default {
     radius: {
       type: Number,
       default: 50
+    }
+  },
+  data(){
+    return {
+      canvas: null,
+      ctx: null,
     }
   },
   watch: {
@@ -24,7 +30,8 @@ export default {
     }
   },
   mounted() {
-    this.ctx = this.$el.getContext('2d')
+    this.canvas = this.$refs.canvas
+    this.ctx = this.canvas.getContext('2d')
     this.draw(this.radius)
   }
 }
