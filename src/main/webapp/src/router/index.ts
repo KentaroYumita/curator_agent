@@ -22,6 +22,11 @@ const routes = [
     name: 'comment',
     component: () => import('../views/comment.vue')
   },
+  {
+    path: '/peopleMap',
+    name: 'peopleMap',
+    component: () => import('../views/peopleMap.vue')
+  },
 ]
 
 
