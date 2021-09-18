@@ -1,10 +1,9 @@
 <template>
   <div class="example">
     <p>↓</p>
-    <MyCanvas :radius="radius"/>
-    <my-canvas :radius="radius"/>
+    <MyCanvas />
     <p>↑</p>
-    <p><input type="range" min="0" max="100" v-model.number="radius"></p>
+    <!--<p><input type="range" min="0" max="100" v-model.number="radius"></p>-->
   </div>
 </template>
 
@@ -14,11 +13,6 @@ export default {
   components: {
     MyCanvas
   },
-  data() {
-    return {
-      radius: 50
-    }
-  }
 }
 </script>
 
