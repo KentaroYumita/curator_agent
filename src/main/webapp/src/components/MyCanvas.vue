@@ -15,13 +15,13 @@ export default {
       sensor: [
           {x:850, y:250, serial:"dca63282b7a3", people:[]},
         {x:680, y:250, serial:"dca63282b8c9", people:[]},
-        {x:450, y:250, serial:"dca63282b8d2", people:[]},
-        {x:450, y:450, serial:"dca63282b98f", people:[]},
+        {x:430, y:250, serial:"dca63282b8d2", people:[]},
+        {x:430, y:450, serial:"dca63282b98f", people:[]},
         {x:300, y:450, serial:"dca63282b9b6", people:[]},
         {x:170, y:450, serial:"dca63282b9da", people:[]},
         {x:30, y:450, serial:"dca63282b9e3", people:[]},
-        {x:150, y:250, serial:"dca63282ba53", people:[]},
-        {x:150, y:190, serial:"dca63282ba85", people:[]},
+        {x:130, y:250, serial:"dca63282ba53", people:[]},
+        {x:130, y:190, serial:"dca63282ba85", people:[]},
         {x:610, y:100, serial:"dca63282ba98", people:[]},
         {x:740, y:100, serial:"dca63282baaf", people:[]},
       ],
@@ -60,7 +60,7 @@ export default {
           let people = sensor.people[j];
 
           // 少ないと青、中程度だと紫、多いと赤
-          this.ctx.fillStyle = people <= 3 ? "#3333FF" : (people <= 7 ? "#FF33FF" : "#FF3333")
+          this.ctx.fillStyle = people <= 2 ? "#3333FF" : (people <= 4 ? "#FF33FF" : "#FF3333")
           this.ctx.fillRect(sensor.x + 10 * j, sensor.y + 5 * (10 - people), 10, 5 * people)
         }
 
