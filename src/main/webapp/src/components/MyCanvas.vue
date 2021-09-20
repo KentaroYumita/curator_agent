@@ -79,31 +79,40 @@ export default {
     },
 
     // センサーからデータ取得
-    getSensor() {
+    async getSensor() {
+      let results = []
       for (let i = 0; i < this.sensor.length; i++) {
-        fetch("https://teamapps.u-aizu.ac.jp/sense/presence/"+this.sensor[i].serial)
-            .then(response => {
-              return response.json()
-            })
-            .then(data => {
-              // 11個のデータを取得
-              for (let j = 0; j < 11; j++) {
-                this.sensor[i].people.push(data[11-(j+1)].reading)
-                this.drawPeople(this.sensor[i])
-              }
-              console.log(data)
-            }).catch(error => {
-          console.log('error: ' + error)
-        })
+        results.push(fetch("https://teamapps.u-aizu.ac.jp/sense/presence/" + this.sensor[i].serial))
+      }
+
+      // 全てのデータ取得が終わるまで待つ
+      let responses = await Promise.all(results)
+
+      // センサー毎に人数を記録
+      for (let i = 0; i < responses.length; i++) {
+        let data = await responses[i].json()
+
+        // 11個のデータを取得
+        for (let j = 0; j < 11; j++) {
+          this.sensor[i].people.push(data[11 - (j + 1)].reading)
+        }
       }
     }
   },
-  mounted() {
+  async mounted() {
     this.canvas = this.$refs.canvas
     this.ctx = this.canvas.getContext('2d')
 
+    // 地図
     this.draw()
-    this.getSensor()
+
+    // センサー情報取得(終わるまで待つ)
+    await this.getSensor()
+
+    // グラフの描画
+    for(let i=0; i<this.sensor.length; i++){
+      this.drawPeople(this.sensor[i])
+    }
   },
 }
 </script>
