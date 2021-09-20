@@ -60,7 +60,7 @@ export default {
           let people = sensor.people[j];
 
           // 少ないと青、中程度だと紫、多いと赤
-          this.ctx.fillStyle = people <= 2 ? "#3333FF" : (people <= 4 ? "#FF33FF" : "#FF3333")
+          this.ctx.fillStyle = people <= 2 ? "#3333FF" : (people <= 5 ? "#FF33FF" : "#FF3333")
           this.ctx.fillRect(sensor.x + 10 * j, sensor.y + 5 * (10 - people), 10, 5 * people)
         }
 
@@ -88,7 +88,7 @@ export default {
             .then(data => {
               // 11個のデータを取得
               for (let j = 0; j < 11; j++) {
-                this.sensor[i].people.push(data[j].reading)
+                this.sensor[i].people.push(data[11-(j+1)].reading)
                 this.drawPeople(this.sensor[i])
               }
               console.log(data)
