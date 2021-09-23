@@ -4,6 +4,7 @@
 
 <script>
 import AssetImage from "@/assets/fks_museum_layout_c.png"
+
 export default {
   data(){
     return {
@@ -24,6 +25,21 @@ export default {
         {x:130, y:190, serial:"dca63282ba85", people:[]},
         {x:610, y:100, serial:"dca63282ba98", people:[]},
         {x:740, y:100, serial:"dca63282baaf", people:[]},
+      ],
+
+      // 経路(グラフ構造)
+      route: [
+        [1,2],
+        [2],
+        [3,4,7],
+        [4],
+        [5,7],
+        [6,7],
+        [7,8],
+        [8],
+        [9,10],
+        [10],
+        [],
       ],
     }
   },
@@ -78,6 +94,56 @@ export default {
       }
     },
 
+    // 矢印の描画
+    drawArrow(){
+      this.ctx.lineWidth = "5"
+      this.ctx.fillStyle = "#FFFF00"
+      this.ctx.strokeStyle = "#FF0000"
+
+      for(let i=0; i<this.route.length; i++){
+        for(let j=0; j<this.route[i].length; j++){
+          // 始点
+          let start = {x: this.sensor[i].x + 110/2, y: this.sensor[i].y + 50}
+          // 終点
+          let end = {x: this.sensor[this.route[i][j]].x + 110/2, y: this.sensor[this.route[i][j]].y + 50}
+
+          // 矢印の長さ
+          let len = Math.sqrt((start.x-end.x)*(start.x-end.x) + (start.y-end.y)*(start.y-end.y))
+          // 先端の大きさ
+          let arrowSize = 20
+
+          // 線分 start-end 上の点、矢印の境目
+          // 線分 start-end を (len-arrowSize : len) で内分する点
+          let p = {x:(start.x*arrowSize+(len-arrowSize)*end.x)/len, y:(start.y*arrowSize+(len-arrowSize)*end.y)/len}
+
+          // 矢印の先端を成す点1
+          let sin = Math.sin(Math.PI/4)
+          let cos = Math.cos(Math.PI/4)
+          let p1 = {x:(p.x-end.x)*cos-(p.y-end.y)*sin+end.x, y:(p.x-end.x)*sin+(p.y-end.y)*cos+end.y}
+
+          // 矢印の先端を成す点2
+          sin = Math.sin(-Math.PI/4)
+          cos = Math.cos(-Math.PI/4)
+          let p2 = {x:(p.x-end.x)*cos-(p.y-end.y)*sin+end.x, y:(p.x-end.x)*sin+(p.y-end.y)*cos+end.y}
+
+          // 線分の描画
+          this.ctx.beginPath()
+          this.ctx.moveTo(start.x, start.y)
+          this.ctx.lineTo(end.x, end.y)
+          this.ctx.stroke()
+
+          // 先端の描画
+          this.ctx.beginPath()
+          this.ctx.moveTo(end.x,end.y)
+          this.ctx.lineTo(p1.x,p1.y)
+          this.ctx.lineTo(p2.x,p2.y)
+          this.ctx.lineTo(end.x,end.y)
+          this.ctx.fill()
+          this.ctx.stroke()
+        }
+      }
+    },
+
     // センサーからデータ取得
     async getSensor() {
       let results = []
@@ -113,6 +179,9 @@ export default {
     for(let i=0; i<this.sensor.length; i++){
       this.drawPeople(this.sensor[i])
     }
+
+    // 矢印の描画
+    this.drawArrow()
   },
 }
 </script>
