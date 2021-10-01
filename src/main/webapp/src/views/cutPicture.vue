@@ -169,7 +169,7 @@ export default {
         image_height: ImageData.height,
       }
 
-      fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/', {
+      fetch(this.$store.getters.getBaseUrl + '/kurate/comment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -179,9 +179,11 @@ export default {
           .then(response => {return response.json()})
           .then(data => {
             console.log('success: '+data)
+            this.$store.dispatch("updateComment")
           }).catch(error => {
-            console.log('error: '+error)
-          })
+        console.log('error: ' + error)
+        this.$store.dispatch("updateComment")
+      })
 
       this.$router.push({name:"exhibitionList"})
     }

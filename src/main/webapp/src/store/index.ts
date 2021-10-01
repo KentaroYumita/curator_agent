@@ -31,6 +31,18 @@ const store = createStore({
         },
         initComment({commit}, resList){
             commit('initComment', resList)
+        },
+        updateComment(context) {
+            fetch(this.getters.getBaseUrl + "/kurate/comment")
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    context.commit("initComment", data)
+                    console.log(data)
+                }).catch(error => {
+                console.log('error: ' + error)
+            })
         }
     }
 })

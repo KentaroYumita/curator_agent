@@ -34,7 +34,8 @@
             </router-link>
           </td>
           <td>
-            <label v-bind:for="index">v</label>
+            <label v-bind:for="index" v-if="commentList.filter(c=>c.exhibit.id==exhibit.id).length>0">v</label>
+            <label v-bind:for="index" v-else style="background: #FFFFFF;"></label>
             <input type="checkbox" v-bind:id="index" @click="CheckBox(index)"/>
           </td>
         </tr>
@@ -108,7 +109,7 @@ export default {
 
     // コメント削除
     DeleteComment() {
-      fetch(this.$store.getters.getBaseUrl + '/exhibit_comment/' + this.delComment.id, {
+      fetch(this.$store.getters.getBaseUrl + '/kurate/comment/' + this.delComment.id, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -120,12 +121,11 @@ export default {
           })
           .then(data => {
             console.log('success: ' + data)
+            this.$store.dispatch("updateComment")
           }).catch(error => {
         console.log('error: ' + error)
+        this.$store.dispatch("updateComment")
       })
-
-      this.$router.push({name: 'exhibitionList'})
-      window.location.reload()
 
       this.hidePopup();
     },

@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 
-@Path("/exhibit_comment")
+@Path("/kurate/comment")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ExhibitCommentResource {
@@ -33,7 +33,7 @@ public class ExhibitCommentResource {
     public Uni<Response> create(ExhibitComment exhibitComment) {
         return exhibitComment.persist()
                 .call(exhibitComment::flush)
-                .onItem().transform(id -> URI.create("/exhibit_comment/" + id))
+                .onItem().transform(id -> URI.create("/kurate/comment" + id))
                 .onItem().transform(uri -> Response.created(uri).build());
     }
 
