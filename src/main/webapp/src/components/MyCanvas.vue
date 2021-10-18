@@ -1,6 +1,16 @@
 <template>
   <div id="my_canvas">
     <canvas ref="canvas" width="1234" height="623" class="canvas"></canvas>
+
+    <div id="slider_area">
+      <!-- <input type="date" name="example1"><br><br> -->
+      <div id="date"></div>
+      過去<input type="range" id="slider" min="5" max="94" value="94">現在<br><br>
+      <input type="button" id="back" value="戻る"/>
+      <input type="button" id="play" value="再生"/>
+      <input type="button" id="next" value="進む"/>
+      <br><br><br><br>
+    </div>
   </div>
 </template>
 
@@ -44,6 +54,30 @@ export default {
         [10],
         [],
       ],
+
+      // センサー情報(全範囲)
+      sensor_all: [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+      ],
+
+      // スライダー再生フラグ
+      play_flag: false,
+      // 再生関数格納用変数
+      siv: null,
+      // スライダー最小値
+      slider_min: 5,
+      // スライダー最大値
+      slider_max: 94,
     }
   },
   watch: {
@@ -201,6 +235,87 @@ export default {
       this.ctx.stroke()
     },
 
+    // スライダー操作
+    sliderEvent(){
+      let slider = document.getElementById("slider")
+      let date = document.getElementById("date")
+      let back = document.getElementById("back")
+      let next = document.getElementById("next")
+      let play = document.getElementById("play")
+
+      // 日付表示
+      date.innerHTML = this.sensor_all[0][slider.value].timeOfCreate
+
+      // スライダー
+      slider.addEventListener('input', () => {
+        date.innerHTML = this.sensor_all[0][slider.value].timeOfCreate
+        this.rewrite(slider.value)
+      })
+
+      // 戻る
+      back.addEventListener('click', () => {
+        slider.value -= 1
+        date.innerHTML = this.sensor_all[0][slider.value].timeOfCreate
+        this.rewrite(slider.value)
+      })
+
+      // 進む
+      next.addEventListener('click', () => {
+        slider.value = +slider.value +1
+        date.innerHTML = this.sensor_all[0][slider.value].timeOfCreate
+        this.rewrite(slider.value)
+      })
+
+      // 再生
+      play.addEventListener(('click'), () => {
+        // 再生開始
+        if(play.value == "再生") {
+          play.value = "停止"
+          // 初期化
+          if (!this.play_flag) {
+            slider.value = this.slider_min
+            this.play_flag = true
+          }
+
+          this.siv = setInterval(() => {
+            slider.value = +slider.value + 1
+            date.innerHTML = this.sensor_all[0][slider.value].timeOfCreate
+            this.rewrite(slider.value)
+
+            if (slider.value >= this.slider_max) {
+              play.value = "再生"
+              this.play_flag = false
+              clearInterval(this.siv)
+            }
+          }, 100)
+        }
+
+        // 再生停止
+        else{
+          play.value = "再生"
+          this.play_flag = false
+          clearInterval(this.siv)
+        }
+      })
+    },
+
+    // 再描画
+    rewrite(slider){
+      // 地図
+      //this.draw()
+
+      // グラフの描画
+      for(let i=0; i<this.sensor.length; i++) {
+        // センサーデータの更新
+        for (let j = 0; j < slider; j++) {
+          this.sensor[i].people[j] = this.sensor_all[i][j + (slider - 5)]
+        }
+      }
+      for(let i=0; i<this.sensor.length; i++) {
+        this.drawPeople(this.sensor[i])
+      }
+    },
+
     // センサーからデータ取得
     async getSensor() {
       let results = []
@@ -214,6 +329,11 @@ export default {
       // センサー毎に人数を記録
       for (let i = 0; i < responses.length; i++) {
         let data = await responses[i].json()
+
+        // 全データを取得
+        for(let j=0; j<data.length; j++){
+          this.sensor_all[i].push(data[data.length - (j + 1)])
+        }
 
         // 11個のデータを取得
         for (let j = 0; j < 11; j++) {
@@ -240,6 +360,9 @@ export default {
 
     // 矢印の描画
     this.drawAllArrows()
+
+    // スライダー操作
+    this.sliderEvent()
   },
 }
 </script>
