@@ -100,6 +100,7 @@ export default {
 
     // センサー毎に描画
     drawPeople(sensor){
+      let max = 20
       this.ctx.font = "20px normal"
 
       for(let i=0; i<this.sensor.length; i++) {
@@ -113,8 +114,8 @@ export default {
           let people = sensor.people[j];
 
           // 少ないと青、中程度だと紫、多いと赤
-          this.ctx.fillStyle = people <= 2 ? "#3333FF" : (people <= 5 ? "#FF33FF" : "#FF3333")
-          this.ctx.fillRect(sensor.x + 10 * j, sensor.y + 5 * (10 - people), 10, 5 * people)
+          this.ctx.fillStyle = people <= max*0.2 ? "#3333FF" : (people <= max*0.5 ? "#FF33FF" : "#FF3333")
+          this.ctx.fillRect(sensor.x + 10 * j, sensor.y + (50/max) * (max - people), 10, (50/max) * people)
         }
 
         // 枠線
@@ -254,21 +255,21 @@ export default {
       // スライダー
       slider.addEventListener('input', () => {
         date.innerHTML = this.sensor_all[0][slider.value].timeOfCreate
-        this.rewrite(slider.value)
+        this.redraw(slider.value)
       })
 
       // 戻る
       back.addEventListener('click', () => {
         slider.value -= 1
         date.innerHTML = this.sensor_all[0][slider.value].timeOfCreate
-        this.rewrite(slider.value)
+        this.redraw(slider.value)
       })
 
       // 進む
       next.addEventListener('click', () => {
         slider.value = +slider.value +1
         date.innerHTML = this.sensor_all[0][slider.value].timeOfCreate
-        this.rewrite(slider.value)
+        this.redraw(slider.value)
       })
 
       // 再生
@@ -287,7 +288,7 @@ export default {
           this.siv = setInterval(() => {
             slider.value = +slider.value + 1
             date.innerHTML = this.sensor_all[0][slider.value].timeOfCreate
-            this.rewrite(slider.value)
+            this.redraw(slider.value)
 
             if (slider.value >= this.slider_max) {
               play.value = "再生"
@@ -313,7 +314,7 @@ export default {
     },
 
     // 再描画
-    rewrite(slider){
+    redraw(slider){
       // 地図
       //this.draw()
 
