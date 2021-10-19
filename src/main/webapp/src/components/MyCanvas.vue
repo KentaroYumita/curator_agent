@@ -4,11 +4,11 @@
 
     <div id="slider_area">
       <!-- <input type="date" name="example1"><br><br> -->
-      <div id="date"></div>
-      過去<input type="range" id="slider" min="5" max="94" value="94">現在<br><br>
-      <input type="button" id="back" value="戻る"/>
-      <input type="button" id="play" value="再生"/>
-      <input type="button" id="next" value="進む"/>
+      <div id="date">0000-00-00 00:00:00</div>
+      過去<input type="range" id="slider" min="5" max="94" value="94" disabled>現在<br><br>
+      <input type="button" id="back" value="戻る" disabled/>
+      <input type="button" id="play" value="再生" disabled/>
+      <input type="button" id="next" value="進む" disabled/>
       <br><br><br><br>
     </div>
   </div>
@@ -243,6 +243,11 @@ export default {
       let next = document.getElementById("next")
       let play = document.getElementById("play")
 
+      slider.disabled = false
+      back.disabled = false
+      next.disabled = false
+      play.disabled = false
+
       // 日付表示
       date.innerHTML = this.sensor_all[0][slider.value].timeOfCreate
 
@@ -273,8 +278,10 @@ export default {
           play.value = "停止"
           // 初期化
           if (!this.play_flag) {
-            slider.value = this.slider_min
             this.play_flag = true
+            slider.disabled = true
+            back.disabled = true
+            next.disabled = true
           }
 
           this.siv = setInterval(() => {
@@ -286,6 +293,9 @@ export default {
               play.value = "再生"
               this.play_flag = false
               clearInterval(this.siv)
+              slider.disabled = false
+              back.disabled = false
+              next.disabled = false
             }
           }, 100)
         }
@@ -295,6 +305,9 @@ export default {
           play.value = "再生"
           this.play_flag = false
           clearInterval(this.siv)
+          slider.disabled = false
+          back.disabled = false
+          next.disabled = false
         }
       })
     },
@@ -304,15 +317,25 @@ export default {
       // 地図
       //this.draw()
 
-      // グラフの描画
-      for(let i=0; i<this.sensor.length; i++) {
-        // センサーデータの更新
-        for (let j = 0; j < slider; j++) {
-          this.sensor[i].people[j] = this.sensor_all[i][j + (slider - 5)]
+      // 地図を背景にする
+      let img = new Image()
+      img.src = AssetImage
+      img.onload = () => {
+        this.ctx.drawImage(img, 0, 0)
+
+        // グラフの描画
+        for(let i=0; i<this.sensor.length; i++) {
+          // センサーデータの更新
+          for (let j = 0; j < 11; j++) {
+            this.sensor[i].people[j] = this.sensor_all[i][j + (+slider - 5)].reading
+          }
         }
-      }
-      for(let i=0; i<this.sensor.length; i++) {
-        this.drawPeople(this.sensor[i])
+        for(let i=0; i<this.sensor.length; i++) {
+          this.drawPeople(this.sensor[i])
+        }
+
+        // 矢印の描画
+        //this.drawAllArrows()
       }
     },
 
@@ -359,7 +382,7 @@ export default {
     }
 
     // 矢印の描画
-    this.drawAllArrows()
+    //this.drawAllArrows()
 
     // スライダー操作
     this.sliderEvent()
